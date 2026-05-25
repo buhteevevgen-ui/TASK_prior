@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1A1A17">
+<title>Task Prioritizer</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%231A1A17%22/><text x=%2250%22 y=%2270%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22%23B43F3F%22 font-family=%22serif%22 font-style=%22italic%22>T</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --surface-hover: #F5F3EE;
+    --border: #E8E5DC;
+    --border-strong: #D4CFC2;
+    --text: #1A1A17;
+    --text-muted: #6B675E;
+    --text-faint: #A9A398;
+    --accent: #B43F3F;
+    --accent-hover: #9A3434;
+    --accent-soft: #FBE9E9;
+    --amber: #C68B2A;
+    --amber-soft: #FBF1DE;
+    --forest: #2D5F3F;
+    --forest-soft: #E3EEE7;
+    --slate: #475569;
+    --slate-soft: #EEF1F5;
+    --proj-ats: #2D5F3F;
+    --proj-ai: #B43F3F;
+    --proj-analytics: #5B4FA2;
+    --proj-brand: #C68B2A;
+    --proj-ma: #1F3A5F;
+    --proj-culture: #8E3D62;
+    --proj-other: #6B675E;
+    --shadow-sm: 0 1px 2px rgba(26, 26, 23, 0.04), 0 1px 3px rgba(26, 26, 23, 0.06);
+    --shadow-md: 0 4px 6px rgba(26, 26, 23, 0.04), 0 10px 15px rgba(26, 26, 23, 0.08);
+    --shadow-lg: 0 10px 25px rgba(26, 26, 23, 0.08), 0 20px 40px rgba(26, 26, 23, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  button { font-family: inherit; font-size: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+  .brand { display: flex; align-items: baseline; gap: 14px; }
+  .brand h1 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 26px; letter-spacing: -0.02em; }
+  .brand h1 em { font-style: italic; color: var(--accent); font-weight: 400; }
+  .brand .tagline { font-size: 12px; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase; }
+  .header-actions { display: flex; align-items: center; gap: 12px; }
+  .view-switch { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 3px; }
+  .view-switch button { padding: 7px 16px; font-size: 13px; font-weight: 500; color: var(--text-muted); border-radius: 6px; transition: all 0.15s ease; }
+  .view-switch button.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+  .btn-primary { background: var(--text); color: var(--surface); padding: 9px 18px; border-radius: 8px; font-weight: 500; font-size: 13px; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-primary:hover { background: #000; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary .plus { font-family: 'JetBrains Mono', monospace; font-size: 16px; line-height: 1; }
+
+  .filters { padding: 20px 32px 12px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .filter-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; margin-right: 4px; }
+  .filter-chip { padding: 5px 12px; border-radius: 100px; border: 1px solid var(--border); background: var(--surface); font-size: 12px; font-weight: 500; color: var(--text-muted); transition: all 0.15s ease; }
+  .filter-chip:hover { border-color: var(--border-strong); color: var(--text); }
+  .filter-chip.active { background: var(--text); color: var(--surface); border-color: var(--text); }
+
+  main { padding: 8px 32px 80px; max-width: 1400px; margin: 0 auto; }
+  .stats-bar { display: flex; gap: 28px; padding: 14px 0 18px; border-bottom: 1px solid var(--border); margin-bottom: 20px; flex-wrap: wrap; }
+  .stat { display: flex; flex-direction: column; gap: 2px; }
+  .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; }
+  .stat-value { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 500; }
+  .stat-value.accent { color: var(--accent); }
+
+  .task-list { display: flex; flex-direction: column; gap: 8px; }
+  .task-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; display: grid; grid-template-columns: 4px 1fr auto auto; gap: 16px; align-items: center; cursor: pointer; transition: all 0.15s ease; }
+  .task-card:hover { border-color: var(--border-strong); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .task-card.status-done { opacity: 0.55; }
+  .task-card.status-done .task-title { text-decoration: line-through; }
+  .project-stripe { grid-column: 1; width: 4px; border-radius: 2px; align-self: stretch; min-height: 32px; }
+  .task-body { grid-column: 2; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .task-row1 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .task-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; }
+  .project-tag { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 4px; background: var(--bg); color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+  .task-meta { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 4px; }
+  .meta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; }
+  .meta-value { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text); font-weight: 500; }
+  .deadline-badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+  .deadline-badge.urgent { background: var(--accent-soft); color: var(--accent); }
+  .deadline-badge.soon { background: var(--amber-soft); color: var(--amber); }
+  .deadline-badge.later { background: var(--slate-soft); color: var(--slate); }
+  .score-display { grid-column: 3; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  .score-value { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 500; line-height: 1; letter-spacing: -0.02em; }
+  .score-value.high { color: var(--accent); }
+  .score-value.med { color: var(--amber); }
+  .score-value.low { color: var(--text-faint); }
+  .score-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; }
+  .task-status { grid-column: 4; }
+  .status-select { padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); font-size: 11px; font-weight: 500; color: var(--text-muted); cursor: pointer; font-family: 'JetBrains Mono', monospace; }
+  .status-select.s-inprogress { background: var(--amber-soft); color: var(--amber); border-color: transparent; }
+  .status-select.s-blocked { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+  .status-select.s-done { background: var(--forest-soft); color: var(--forest); border-color: transparent; }
+  .empty-state { padding: 80px 20px; text-align: center; color: var(--text-faint); }
+  .empty-state h3 { font-family: 'Fraunces', serif; font-size: 22px; color: var(--text-muted); margin-bottom: 8px; font-weight: 400; }
+
+  .week-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; align-items: start; }
+  .day-column { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; min-height: 200px; transition: all 0.15s ease; }
+  .day-column.drag-over { background: var(--accent-soft); border-color: var(--accent); }
+  .day-header { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .day-name { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; }
+  .day-name em { font-style: italic; color: var(--accent); font-weight: 400; }
+  .day-date { font-size: 11px; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+  .day-load { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-top: 6px; }
+  .day-load.overload { color: var(--accent); font-weight: 600; }
+  .day-cards { display: flex; flex-direction: column; gap: 8px; min-height: 30px; }
+  .mini-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; cursor: grab; transition: all 0.15s ease; border-left: 3px solid var(--proj-other); }
+  .mini-card:hover { background: var(--surface-hover); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .mini-card:active { cursor: grabbing; }
+  .mini-card.dragging { opacity: 0.4; }
+  .mini-card.status-done { opacity: 0.5; }
+  .mini-card.status-done .mini-title { text-decoration: line-through; }
+  .mini-title { font-family: 'Fraunces', serif; font-size: 13px; font-weight: 500; margin-bottom: 4px; line-height: 1.3; }
+  .mini-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); }
+  .mini-score { font-weight: 600; color: var(--accent); }
+
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(26, 26, 23, 0.5); backdrop-filter: blur(4px); display: none; align-items: flex-start; justify-content: center; padding: 40px 20px; z-index: 100; overflow-y: auto; }
+  .modal-backdrop.open { display: flex; }
+  .modal { background: var(--surface); border-radius: 16px; width: 100%; max-width: 640px; padding: 32px; box-shadow: var(--shadow-lg); animation: modalIn 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+  @keyframes modalIn { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .modal-header h2 { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 500; letter-spacing: -0.02em; }
+  .modal-header h2 em { font-style: italic; color: var(--accent); }
+  .close-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all 0.15s ease; font-size: 20px; }
+  .close-btn:hover { background: var(--bg); color: var(--text); }
+  .form-section { margin-bottom: 20px; }
+  .form-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .form-row { display: grid; grid-template-columns: 140px 1fr; gap: 16px; align-items: center; margin-bottom: 12px; }
+  .form-row label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .form-row input[type="text"], .form-row input[type="date"], .form-row textarea, .form-row select { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); font-size: 13px; transition: border-color 0.15s ease; }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus { outline: none; border-color: var(--text); }
+  .form-row textarea { resize: vertical; min-height: 60px; font-family: inherit; }
+  .scale-input { display: flex; gap: 4px; }
+  .scale-input button { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; color: var(--text-muted); transition: all 0.1s ease; }
+  .scale-input button:hover { border-color: var(--border-strong); color: var(--text); }
+  .scale-input button.selected { background: var(--text); color: var(--surface); border-color: var(--text); }
+  .scale-hint { font-size: 11px; color: var(--text-faint); margin-top: 4px; font-style: italic; }
+  .preview-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin: 16px 0; display: flex; justify-content: space-between; align-items: center; }
+  .preview-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; }
+  .preview-stats { display: flex; gap: 20px; align-items: center; }
+  .preview-stat { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+  .preview-stat-value { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 16px; }
+  .preview-stat-value.large { font-family: 'Fraunces', serif; font-size: 28px; color: var(--accent); }
+  .preview-stat-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; }
+  .modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .modal-actions-right { display: flex; gap: 8px; }
+  .btn-secondary { padding: 9px 16px; border-radius: 8px; background: var(--bg); font-weight: 500; font-size: 13px; transition: all 0.15s ease; border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--surface-hover); }
+  .btn-danger { padding: 9px 16px; border-radius: 8px; background: transparent; color: var(--accent); font-weight: 500; font-size: 13px; transition: all 0.15s ease; }
+  .btn-danger:hover { background: var(--accent-soft); }
+
+  .footer-actions { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 8px; z-index: 40; }
+  .ghost-btn { background: var(--surface); border: 1px solid var(--border); padding: 8px 14px; border-radius: 8px; font-size: 12px; color: var(--text-muted); box-shadow: var(--shadow-sm); transition: all 0.15s ease; }
+  .ghost-btn:hover { color: var(--text); border-color: var(--border-strong); }
+
+  .hidden { display: none !important; }
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--surface); padding: 10px 18px; border-radius: 8px; font-size: 13px; box-shadow: var(--shadow-md); opacity: 0; transition: opacity 0.2s ease; z-index: 200; pointer-events: none; }
+  .toast.show { opacity: 1; }
+
+  @media (max-width: 900px) {
+    .week-board { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; gap: 6px; }
+    main { padding: 8px 16px 80px; }
+    header { padding: 14px 16px; flex-wrap: wrap; gap: 12px; }
+    .task-card { grid-template-columns: 4px 1fr; }
+    .score-display, .task-status { grid-column: 2; align-items: flex-start; flex-direction: row; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>Task <em>Prioritizer</em></h1>
+    <span class="tagline">Score = Приоритет / Сложность × 10</span>
+  </div>
+  <div class="header-actions">
+    <div class="view-switch">
+      <button id="view-list" class="active">Список</button>
+      <button id="view-week">План недели</button>
+    </div>
+    <button class="btn-primary" id="add-task-btn"><span class="plus">+</span> Новая задача</button>
+  </div>
+</header>
+
+<main>
+  <section id="list-view">
+    <div class="filters"><span class="filter-label">Проект:</span><div id="project-filters" style="display:contents"></div></div>
+    <div class="filters" style="padding-top: 0;">
+      <span class="filter-label">Статус:</span>
+      <button class="filter-chip status-filter active" data-status="active">Активные</button>
+      <button class="filter-chip status-filter" data-status="all">Все</button>
+      <button class="filter-chip status-filter" data-status="Done">Сделано</button>
+    </div>
+    <div class="stats-bar" id="stats-bar"></div>
+    <div class="task-list" id="task-list"></div>
+  </section>
+
+  <section id="week-view" class="hidden">
+    <div class="filters">
+      <span class="filter-label">Неделя:</span>
+      <button class="filter-chip" id="week-prev">← Предыдущая</button>
+      <span class="filter-label" id="week-range" style="margin: 0 8px;"></span>
+      <button class="filter-chip" id="week-next">Следующая →</button>
+      <button class="filter-chip" id="week-today" style="margin-left: 12px;">Эта неделя</button>
+    </div>
+    <div class="stats-bar" id="week-stats"></div>
+    <div class="week-board" id="week-board"></div>
+  </section>
+</main>
+
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Новая <em>задача</em></h2>
+      <button class="close-btn" id="modal-close">×</button>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">Базово</div>
+      <div class="form-row"><label>Название</label><input type="text" id="f-title" placeholder="Что нужно сделать"></div>
+      <div class="form-row"><label>Проект</label><select id="f-project">
+        <option value="ATS">ATS</option>
+        <option value="AI в рекрутменте">AI в рекрутменте</option>
+        <option value="Аналитика и дашборды">Аналитика и дашборды</option>
+        <option value="HR Brand">HR Brand</option>
+        <option value="M&A">M&A</option>
+        <option value="Culture fit">Culture fit</option>
+        <option value="Другое">Другое</option>
+      </select></div>
+      <div class="form-row"><label>Описание</label><textarea id="f-description" placeholder="Что именно сделать"></textarea></div>
+      <div class="form-row"><label>Зависимости</label><input type="text" id="f-dependencies" placeholder="От кого ждёшь, кого подключаешь"></div>
+      <div class="form-row"><label>Дедлайн</label><input type="date" id="f-deadline"></div>
+      <div class="form-row"><label>Запланировано на</label><input type="date" id="f-scheduled"></div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">Сложность (1-5)</div>
+      <div class="form-row"><label>Время</label><div><div class="scale-input" data-field="time"></div><div class="scale-hint">1=до 2ч • 2=до дня • 3=2-3 дня • 4=до недели • 5=больше недели</div></div></div>
+      <div class="form-row"><label>Фокус</label><div><div class="scale-input" data-field="focus"></div><div class="scale-hint">1=механика • 3=средняя нагрузка • 5=глубокий заход, новая область</div></div></div>
+      <div class="form-row"><label>Координация</label><div><div class="scale-input" data-field="coordination"></div><div class="scale-hint">1=одна • 3=своя команда • 5=кросс-функционал + внешние</div></div></div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">Приоритет (1-5) — срочность считается автоматически из дедлайна</div>
+      <div class="form-row"><label>Важность</label><div><div class="scale-input" data-field="importance"></div><div class="scale-hint">1=nice to have • 3=поддерживает функцию • 5=критично для OKR</div></div></div>
+      <div class="form-row"><label>Cost of delay</label><div><div class="scale-input" data-field="costOfDelay"></div><div class="scale-hint">1=можно отложить • 3=замедлит соседние • 5=блокирует бизнес</div></div></div>
+      <div class="form-row"><label>Статус</label><select id="f-status">
+        <option value="Todo">Todo</option><option value="In progress">In progress</option><option value="Blocked">Blocked</option><option value="Done">Done</option>
+      </select></div>
+    </div>
+    <div class="preview-card">
+      <div class="preview-label">Предпросмотр</div>
+      <div class="preview-stats">
+        <div class="preview-stat"><div class="preview-stat-value" id="preview-slozh">—</div><div class="preview-stat-label">Сложность</div></div>
+        <div class="preview-stat"><div class="preview-stat-value" id="preview-prio">—</div><div class="preview-stat-label">Приоритет</div></div>
+        <div class="preview-stat"><div class="preview-stat-value large" id="preview-score">—</div><div class="preview-stat-label">Score</div></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-danger" id="delete-btn" style="display:none;">Удалить</button>
+      <div class="modal-actions-right">
+        <button class="btn-secondary" id="cancel-btn">Отмена</button>
+        <button class="btn-primary" id="save-btn">Сохранить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-actions">
+  <button class="ghost-btn" id="export-btn">Экспорт</button>
+  <button class="ghost-btn" id="import-btn">Импорт</button>
+  <input type="file" id="import-file" accept="application/json" style="display:none;">
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'taskPrioritizer:v1';
+
+const SEED = [
+  { id: 't1', title: 'Follow-up по итогам пятничной встречи Brand automation', project: 'HR Brand', description: 'Написать что обсуждали, что будем обсуждать в следующий синк', dependencies: '', deadline: '2026-05-26', scheduledFor: '2026-05-25', status: 'Todo', time: 1, focus: 1, coordination: 1, importance: 3, costOfDelay: 2 },
+  { id: 't2', title: 'Подготовить метрики для пилота в Sales', project: 'AI в рекрутменте', description: 'Определить проблему, которую решает инструмент, и автоматизируемое действие. Вывести метрику, зафиксировать as is, сформулировать ожидаемое значение.', dependencies: 'Костя Зайцев (саппорт)', deadline: '2026-05-28', scheduledFor: '2026-05-28', status: 'Todo', time: 2, focus: 3, coordination: 2, importance: 4, costOfDelay: 5 },
+  { id: 't3', title: 'Подготовить Follow-up по встрече с Аней', project: 'Culture fit', description: 'По итогам встречи с Аней зафиксировать договорённости, обсудить на синке во вторник', dependencies: '', deadline: '2026-05-25', scheduledFor: '2026-05-25', status: 'Todo', time: 1, focus: 2, coordination: 1, importance: 5, costOfDelay: 1 },
+  { id: 't4', title: 'Обновить карточки на Confluence / реестр проектов', project: 'Другое', description: 'Обновить карточки проектов и реестр к завтрашнему project review', dependencies: '', deadline: '2026-05-26', scheduledFor: '2026-05-25', status: 'Todo', time: 2, focus: 3, coordination: 1, importance: 5, costOfDelay: 4 },
+  { id: 't5', title: 'Подготовить обоснование для доработки Avito Survey', project: 'AI в рекрутменте', description: 'Подготовить обоснование доработок Avito Survey, написать владельцу продукта и запланировать встречу', dependencies: 'РГ', deadline: '2026-05-28', scheduledFor: '2026-06-02', status: 'Todo', time: 2, focus: 2, coordination: 2, importance: 2, costOfDelay: 3 },
+  { id: 't6', title: 'Подготовить доску по M&A для штурма to be', project: 'M&A', description: 'Подготовить шаблон доски для штурма с РГ по проблемам в процессе', dependencies: '', deadline: '2026-05-27', scheduledFor: '2026-05-27', status: 'Todo', time: 2, focus: 4, coordination: 1, importance: 4, costOfDelay: 4 },
+  { id: 't7', title: 'Написать Ане загруз для Кости', project: 'Другое', description: 'Подробно расписать деятельность Кости на 40 часов в неделю', dependencies: '', deadline: '2026-05-26', scheduledFor: '2026-05-26', status: 'Todo', time: 2, focus: 3, coordination: 1, importance: 3, costOfDelay: 4 },
+  { id: 't8', title: 'Погрузиться в AI-проекты более плотно', project: 'AI в рекрутменте', description: 'Погрузиться в роадмап и цели проектов, составить более точные планы', dependencies: 'Костя', deadline: '2026-06-05', scheduledFor: '2026-06-01', status: 'Todo', time: 2, focus: 4, coordination: 2, importance: 3, costOfDelay: 2 },
+  { id: 't9', title: 'Запланировать пилоты в стажировках', project: 'AI в рекрутменте', description: 'Дойти до Вики, предложить пилоты, проработать метрики и сроки', dependencies: 'Вика, Костя', deadline: '2026-05-29', scheduledFor: '2026-05-29', status: 'Todo', time: 2, focus: 3, coordination: 2, importance: 4, costOfDelay: 2 },
+  { id: 't10', title: 'Запланировать встречу со Степаном Грачёвым по M&A', project: 'M&A', description: 'Написать Степану и поставить встречу по процессам M&A', dependencies: 'Степан', deadline: '2026-05-29', scheduledFor: '2026-05-27', status: 'Todo', time: 1, focus: 2, coordination: 1, importance: 3, costOfDelay: 3 },
+];
+
+const PROJECT_COLORS = {
+  'ATS': 'var(--proj-ats)', 'AI в рекрутменте': 'var(--proj-ai)', 'Аналитика и дашборды': 'var(--proj-analytics)',
+  'HR Brand': 'var(--proj-brand)', 'M&A': 'var(--proj-ma)', 'Culture fit': 'var(--proj-culture)', 'Другое': 'var(--proj-other)',
+};
+
+let state = { tasks: [], view: 'list', filterProject: 'all', filterStatus: 'active', editingId: null, weekOffset: 0 };
+
+// ============ STORAGE (localStorage) ============
+function loadTasks() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      state.tasks = JSON.parse(raw);
+    } else {
+      state.tasks = JSON.parse(JSON.stringify(SEED));
+      saveTasks();
+    }
+  } catch (e) {
+    state.tasks = JSON.parse(JSON.stringify(SEED));
+  }
+}
+function saveTasks() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.tasks)); }
+  catch (e) { showToast('Не удалось сохранить', true); }
+}
+
+// ============ CALCULATIONS ============
+function calcSlozh(t) { return (+t.time + +t.focus + +t.coordination) / 3; }
+function calcDaysUntil(s) { if (!s) return null; const today = new Date(); today.setHours(0,0,0,0); const d = new Date(s); d.setHours(0,0,0,0); return Math.round((d - today) / 86400000); }
+function calcUrgency(d) { if (d == null) return 1; if (d <= 3) return 5; if (d <= 7) return 4; if (d <= 14) return 3; if (d <= 30) return 2; return 1; }
+function calcPriority(t) { return +t.importance * 0.4 + calcUrgency(calcDaysUntil(t.deadline)) * 0.4 + +t.costOfDelay * 0.2; }
+function calcScore(t) { const s = calcSlozh(t); if (!s) return 0; return Math.round(calcPriority(t) / s * 100) / 10; }
+function calcHoursEstimate(t) { return ({1:2,2:6,3:16,4:32,5:48})[+t.time] || 0; }
+
+// ============ HELPERS ============
+function escapeHtml(s) { if (s == null) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+function deadlineBadgeClass(d) { if (d == null) return 'later'; if (d <= 3) return 'urgent'; if (d <= 7) return 'soon'; return 'later'; }
+function deadlineText(d) { if (d == null) return 'без срока'; if (d < 0) return `просрочено ${-d} д`; if (d === 0) return 'сегодня'; if (d === 1) return 'завтра'; return `${d} д`; }
+function scoreClass(s) { if (s >= 20) return 'high'; if (s >= 10) return 'med'; return 'low'; }
+function getMonday(off=0) { const d = new Date(); d.setHours(0,0,0,0); const day = d.getDay(); const diff = day === 0 ? -6 : 1 - day; d.setDate(d.getDate() + diff + off * 7); return d; }
+function formatDate(d) { return `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}`; }
+function dateISO(d) { return d.toISOString().split('T')[0]; }
+
+// ============ RENDER ============
+function filteredTasks() {
+  return state.tasks.filter(t => {
+    if (state.filterProject !== 'all' && t.project !== state.filterProject) return false;
+    if (state.filterStatus === 'active' && t.status === 'Done') return false;
+    if (state.filterStatus !== 'all' && state.filterStatus !== 'active' && t.status !== state.filterStatus) return false;
+    return true;
+  });
+}
+
+function renderProjectFilters() {
+  const container = document.getElementById('project-filters');
+  const projects = ['all', ...new Set(state.tasks.map(t => t.project))];
+  container.innerHTML = projects.map(p => `<button class="filter-chip project-filter ${state.filterProject === p ? 'active' : ''}" data-project="${escapeHtml(p)}">${p === 'all' ? 'Все' : escapeHtml(p)}</button>`).join('');
+  container.querySelectorAll('.project-filter').forEach(btn => { btn.onclick = () => { state.filterProject = btn.dataset.project; render(); }; });
+}
+
+function renderTaskList() {
+  const list = document.getElementById('task-list');
+  const tasks = filteredTasks().map(t => ({ ...t, score: calcScore(t), days: calcDaysUntil(t.deadline) })).sort((a, b) => b.score - a.score);
+  if (tasks.length === 0) { list.innerHTML = `<div class="empty-state"><h3>Пусто</h3><p>Тут будут задачи когда добавишь</p></div>`; return; }
+  list.innerHTML = tasks.map(t => `
+    <div class="task-card status-${t.status === 'Done' ? 'done' : 'active'}" data-id="${t.id}">
+      <div class="project-stripe" style="background: ${PROJECT_COLORS[t.project] || 'var(--proj-other)'};"></div>
+      <div class="task-body">
+        <div class="task-row1"><span class="task-title">${escapeHtml(t.title)}</span><span class="project-tag">${escapeHtml(t.project)}</span></div>
+        <div class="task-meta">
+          <span class="deadline-badge ${deadlineBadgeClass(t.days)}">${deadlineText(t.days)}</span>
+          <span class="meta-item"><span class="meta-label">Сл</span> <span class="meta-value">${calcSlozh(t).toFixed(1)}</span></span>
+          <span class="meta-item"><span class="meta-label">Пр</span> <span class="meta-value">${calcPriority(t).toFixed(2)}</span></span>
+          ${t.dependencies ? `<span class="meta-item"><span class="meta-label">с</span> ${escapeHtml(t.dependencies)}</span>` : ''}
+        </div>
+      </div>
+      <div class="score-display"><div class="score-value ${scoreClass(t.score)}">${t.score.toFixed(1)}</div><div class="score-label">Score</div></div>
+      <div class="task-status"><select class="status-select s-${t.status.toLowerCase().replace(/\s+/g, '')}" data-id="${t.id}">
+        <option ${t.status==='Todo'?'selected':''}>Todo</option><option ${t.status==='In progress'?'selected':''}>In progress</option><option ${t.status==='Blocked'?'selected':''}>Blocked</option><option ${t.status==='Done'?'selected':''}>Done</option>
+      </select></div>
+    </div>`).join('');
+  list.querySelectorAll('.task-card').forEach(card => { card.addEventListener('click', e => { if (e.target.tagName === 'SELECT') return; openEditModal(card.dataset.id); }); });
+  list.querySelectorAll('.status-select').forEach(sel => {
+    sel.addEventListener('click', e => e.stopPropagation());
+    sel.addEventListener('change', e => { const task = state.tasks.find(x => x.id === sel.dataset.id); if (task) { task.status = e.target.value; saveTasks(); render(); } });
+  });
+}
+
+function renderStats() {
+  const tasks = filteredTasks();
+  const active = tasks.filter(t => t.status !== 'Done');
+  const total = active.reduce((s, t) => s + calcScore(t), 0);
+  const avg = active.length ? (total / active.length).toFixed(1) : '—';
+  const top = active.length ? Math.max(...active.map(t => calcScore(t))).toFixed(1) : '—';
+  const urgent = active.filter(t => { const d = calcDaysUntil(t.deadline); return d != null && d <= 3; }).length;
+  document.getElementById('stats-bar').innerHTML = `
+    <div class="stat"><span class="stat-label">Активных</span><span class="stat-value">${active.length}</span></div>
+    <div class="stat"><span class="stat-label">Top Score</span><span class="stat-value accent">${top}</span></div>
+    <div class="stat"><span class="stat-label">Средний Score</span><span class="stat-value">${avg}</span></div>
+    <div class="stat"><span class="stat-label">Горящих (≤3 дн)</span><span class="stat-value ${urgent > 3 ? 'accent' : ''}">${urgent}</span></div>`;
+}
+
+function renderWeekView() {
+  const monday = getMonday(state.weekOffset);
+  const days = []; for (let i = 0; i < 5; i++) { const d = new Date(monday); d.setDate(monday.getDate() + i); days.push(d); }
+  const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт'];
+  const friday = new Date(monday); friday.setDate(monday.getDate() + 4);
+  document.getElementById('week-range').textContent = `${formatDate(monday)} — ${formatDate(friday)}`;
+  const weekTasks = state.tasks.filter(t => { if (!t.scheduledFor) return false; const sd = new Date(t.scheduledFor); sd.setHours(0,0,0,0); return sd >= monday && sd <= friday; });
+  const totalHours = weekTasks.filter(t => t.status !== 'Done').reduce((s, t) => s + calcHoursEstimate(t), 0);
+  const doneCount = weekTasks.filter(t => t.status === 'Done').length;
+  document.getElementById('week-stats').innerHTML = `
+    <div class="stat"><span class="stat-label">Задач на неделю</span><span class="stat-value">${weekTasks.length}</span></div>
+    <div class="stat"><span class="stat-label">Часов работы</span><span class="stat-value ${totalHours > 30 ? 'accent' : ''}">${totalHours}ч</span></div>
+    <div class="stat"><span class="stat-label">Выполнено</span><span class="stat-value">${doneCount}</span></div>
+    <div class="stat"><span class="stat-label">Свободно (30ч норма)</span><span class="stat-value">${Math.max(0, 30 - totalHours)}ч</span></div>`;
+  const board = document.getElementById('week-board');
+  board.innerHTML = days.map((d, idx) => {
+    const iso = dateISO(d);
+    const dayTasks = state.tasks.filter(t => t.scheduledFor === iso).map(t => ({ ...t, score: calcScore(t) })).sort((a, b) => b.score - a.score);
+    const dayHours = dayTasks.filter(t => t.status !== 'Done').reduce((s, t) => s + calcHoursEstimate(t), 0);
+    const overload = dayHours > 7;
+    return `<div class="day-column" data-date="${iso}">
+      <div class="day-header"><div class="day-name">${dayNames[idx]} <em>${formatDate(d)}</em></div><div class="day-load ${overload ? 'overload' : ''}">${dayHours}ч ${overload ? '⚠' : ''}</div></div>
+      <div class="day-cards">${dayTasks.map(t => `
+        <div class="mini-card status-${t.status === 'Done' ? 'done' : 'active'}" draggable="true" data-id="${t.id}" style="border-left-color: ${PROJECT_COLORS[t.project] || 'var(--proj-other)'};">
+          <div class="mini-title">${escapeHtml(t.title)}</div>
+          <div class="mini-meta"><span>${escapeHtml(t.project)}</span><span class="mini-score">${t.score.toFixed(1)}</span></div>
+        </div>`).join('')}</div></div>`;
+  }).join('');
+  let draggingId = null;
+  board.querySelectorAll('.mini-card').forEach(card => {
+    card.addEventListener('dragstart', e => { draggingId = card.dataset.id; card.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+    card.addEventListener('dragend', () => { card.classList.remove('dragging'); draggingId = null; });
+    card.addEventListener('click', () => openEditModal(card.dataset.id));
+  });
+  board.querySelectorAll('.day-column').forEach(col => {
+    col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('drag-over'); });
+    col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+    col.addEventListener('drop', e => { e.preventDefault(); col.classList.remove('drag-over'); if (!draggingId) return; const task = state.tasks.find(t => t.id === draggingId); if (task) { task.scheduledFor = col.dataset.date; saveTasks(); render(); } });
+  });
+}
+
+function render() {
+  if (state.view === 'list') {
+    document.getElementById('list-view').classList.remove('hidden'); document.getElementById('week-view').classList.add('hidden');
+    renderProjectFilters(); renderStats(); renderTaskList();
+  } else {
+    document.getElementById('list-view').classList.add('hidden'); document.getElementById('week-view').classList.remove('hidden');
+    renderWeekView();
+  }
+}
+
+// ============ MODAL ============
+function buildScaleInputs() {
+  document.querySelectorAll('.scale-input').forEach(group => {
+    group.innerHTML = [1,2,3,4,5].map(n => `<button type="button" data-value="${n}">${n}</button>`).join('');
+    group.querySelectorAll('button').forEach(btn => { btn.onclick = () => { group.querySelectorAll('button').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); group.dataset.selected = btn.dataset.value; updatePreview(); }; });
+  });
+}
+function setScale(f, v) { const g = document.querySelector(`.scale-input[data-field="${f}"]`); if (!g) return; g.querySelectorAll('button').forEach(b => b.classList.toggle('selected', b.dataset.value == v)); g.dataset.selected = v || ''; }
+function getScale(f) { const g = document.querySelector(`.scale-input[data-field="${f}"]`); return g ? Number(g.dataset.selected) : 0; }
+function updatePreview() {
+  const t = { time: getScale('time'), focus: getScale('focus'), coordination: getScale('coordination'), importance: getScale('importance'), costOfDelay: getScale('costOfDelay'), deadline: document.getElementById('f-deadline').value };
+  const hasS = t.time && t.focus && t.coordination; const hasP = t.importance && t.costOfDelay && t.deadline;
+  document.getElementById('preview-slozh').textContent = hasS ? calcSlozh(t).toFixed(1) : '—';
+  document.getElementById('preview-prio').textContent = hasP ? calcPriority(t).toFixed(2) : '—';
+  document.getElementById('preview-score').textContent = (hasS && hasP) ? calcScore(t).toFixed(1) : '—';
+}
+function openAddModal() {
+  state.editingId = null;
+  document.getElementById('modal-title').innerHTML = 'Новая <em>задача</em>';
+  ['f-title','f-description','f-dependencies','f-deadline','f-scheduled'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-project').value = 'AI в рекрутменте';
+  document.getElementById('f-status').value = 'Todo';
+  ['time','focus','coordination','importance','costOfDelay'].forEach(f => setScale(f, null));
+  document.getElementById('delete-btn').style.display = 'none';
+  updatePreview();
+  document.getElementById('modal-backdrop').classList.add('open');
+  setTimeout(() => document.getElementById('f-title').focus(), 100);
+}
+function openEditModal(id) {
+  const t = state.tasks.find(x => x.id === id); if (!t) return;
+  state.editingId = id;
+  document.getElementById('modal-title').innerHTML = 'Редактировать <em>задачу</em>';
+  document.getElementById('f-title').value = t.title || '';
+  document.getElementById('f-project').value = t.project || 'Другое';
+  document.getElementById('f-description').value = t.description || '';
+  document.getElementById('f-dependencies').value = t.dependencies || '';
+  document.getElementById('f-deadline').value = t.deadline || '';
+  document.getElementById('f-scheduled').value = t.scheduledFor || '';
+  document.getElementById('f-status').value = t.status || 'Todo';
+  setScale('time', t.time); setScale('focus', t.focus); setScale('coordination', t.coordination); setScale('importance', t.importance); setScale('costOfDelay', t.costOfDelay);
+  document.getElementById('delete-btn').style.display = '';
+  updatePreview();
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+function closeModal() { document.getElementById('modal-backdrop').classList.remove('open'); }
+function saveFromModal() {
+  const title = document.getElementById('f-title').value.trim();
+  if (!title) { showToast('Нужно название', true); return; }
+  const t = { id: state.editingId || ('t' + Date.now()), title, project: document.getElementById('f-project').value, description: document.getElementById('f-description').value.trim(), dependencies: document.getElementById('f-dependencies').value.trim(), deadline: document.getElementById('f-deadline').value, scheduledFor: document.getElementById('f-scheduled').value, status: document.getElementById('f-status').value, time: getScale('time') || 1, focus: getScale('focus') || 1, coordination: getScale('coordination') || 1, importance: getScale('importance') || 1, costOfDelay: getScale('costOfDelay') || 1 };
+  if (state.editingId) { const i = state.tasks.findIndex(x => x.id === state.editingId); if (i >= 0) state.tasks[i] = t; } else { state.tasks.push(t); }
+  saveTasks(); closeModal(); render(); showToast(state.editingId ? 'Обновлено' : 'Задача добавлена');
+}
+function deleteFromModal() { if (!state.editingId) return; if (!confirm('Удалить задачу?')) return; state.tasks = state.tasks.filter(t => t.id !== state.editingId); saveTasks(); closeModal(); render(); showToast('Удалено'); }
+
+function showToast(text, err = false) { const t = document.getElementById('toast'); t.textContent = text; t.style.background = err ? 'var(--accent)' : 'var(--text)'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
+
+function exportJson() {
+  const blob = new Blob([JSON.stringify(state.tasks, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `tasks_${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(url);
+  showToast('Экспортировано');
+}
+function importJson(file) {
+  const r = new FileReader();
+  r.onload = e => { try { const p = JSON.parse(e.target.result); if (!Array.isArray(p)) throw 0; if (confirm(`Заменить ${state.tasks.length} текущих задач на ${p.length} из файла?`)) { state.tasks = p; saveTasks(); render(); showToast('Импортировано'); } } catch { showToast('Не удалось прочитать файл', true); } };
+  r.readAsText(file);
+}
+
+function init() {
+  buildScaleInputs();
+  loadTasks();
+  render();
+  document.getElementById('view-list').onclick = () => { state.view = 'list'; document.getElementById('view-list').classList.add('active'); document.getElementById('view-week').classList.remove('active'); render(); };
+  document.getElementById('view-week').onclick = () => { state.view = 'week'; document.getElementById('view-week').classList.add('active'); document.getElementById('view-list').classList.remove('active'); render(); };
+  document.querySelectorAll('.status-filter').forEach(btn => { btn.onclick = () => { document.querySelectorAll('.status-filter').forEach(b => b.classList.remove('active')); btn.classList.add('active'); state.filterStatus = btn.dataset.status; render(); }; });
+  document.getElementById('week-prev').onclick = () => { state.weekOffset--; render(); };
+  document.getElementById('week-next').onclick = () => { state.weekOffset++; render(); };
+  document.getElementById('week-today').onclick = () => { state.weekOffset = 0; render(); };
+  document.getElementById('add-task-btn').onclick = openAddModal;
+  document.getElementById('modal-close').onclick = closeModal;
+  document.getElementById('cancel-btn').onclick = closeModal;
+  document.getElementById('save-btn').onclick = saveFromModal;
+  document.getElementById('delete-btn').onclick = deleteFromModal;
+  document.getElementById('f-deadline').addEventListener('input', updatePreview);
+  document.getElementById('modal-backdrop').addEventListener('click', e => { if (e.target.id === 'modal-backdrop') closeModal(); });
+  document.getElementById('export-btn').onclick = exportJson;
+  document.getElementById('import-btn').onclick = () => document.getElementById('import-file').click();
+  document.getElementById('import-file').addEventListener('change', e => { if (e.target.files[0]) importJson(e.target.files[0]); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openAddModal(); } });
+}
+init();
+</script>
+</body>
+</html>
