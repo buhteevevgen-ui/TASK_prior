@@ -397,7 +397,7 @@ function getDayLoad(iso, excludeId = null) {
 
 /**
  * Подбирает оптимальную дату для задачи.
- * Логика: ищем первый рабочий день (Пн-Пт) начиная с сегодня,
+ * Логика: ищем первый рабочий день (Пн-Пт) НАЧИНАЯ С ЗАВТРА,
  * где (текущая загрузка + min(нужное время, 7)) <= 7 часов.
  * Не выходим за дедлайн. Если все дни до дедлайна забиты — ставим на день дедлайна.
  *
@@ -405,7 +405,7 @@ function getDayLoad(iso, excludeId = null) {
  */
 function autoSchedule(taskDraft, excludeId = null) {
   const hoursNeeded = calcHoursEstimate(taskDraft);
-  const today = new Date(); today.setHours(0,0,0,0);
+  const tomorrow = new Date(); tomorrow.setHours(0,0,0,0); tomorrow.setDate(tomorrow.getDate() + 1);
 
   let deadlineDate = null;
   if (taskDraft.deadline) {
@@ -418,10 +418,10 @@ function autoSchedule(taskDraft, excludeId = null) {
 
   let lastWorkdayBeforeDeadline = null;
 
-  // Итерируем по дням
+  // Итерируем по дням начиная с завтра
   for (let i = 0; i < 60; i++) {
-    const candidate = new Date(today);
-    candidate.setDate(today.getDate() + i);
+    const candidate = new Date(tomorrow);
+    candidate.setDate(tomorrow.getDate() + i);
 
     if (isWeekend(candidate)) continue;
 
@@ -439,20 +439,18 @@ function autoSchedule(taskDraft, excludeId = null) {
 
     if (load + slotNeeded <= DAY_CAPACITY) {
       // Влезает
-      const overload = false;
-      return { date: iso, overload, lateAfterDeadline: false, message: '' };
+      return { date: iso, overload: false, lateAfterDeadline: false, message: '' };
     }
   }
 
   // Не нашли свободного слота
   if (lastWorkdayBeforeDeadline) {
-    // Ставим на последний рабочий день перед дедлайном с предупреждением
     const iso = dateISO(lastWorkdayBeforeDeadline);
     return { date: iso, overload: true, lateAfterDeadline: false, message: 'Все дни до дедлайна забиты — день будет перегружен' };
   }
 
-  // Нет дедлайна, не смогли найти — ставим на ближайший рабочий день
-  let fallback = new Date(today);
+  // Нет дедлайна или дедлайн уже прошёл/сегодня — ставим на ближайший рабочий день начиная с завтра
+  let fallback = new Date(tomorrow);
   while (isWeekend(fallback)) fallback.setDate(fallback.getDate() + 1);
   return { date: dateISO(fallback), overload: true, lateAfterDeadline: false, message: 'Подходящего слота нет — все дни загружены' };
 }
@@ -668,7 +666,7 @@ function updateAutoHint() {
     return;
   }
   const hours = calcHoursEstimate({ time });
-  hint.textContent = `Задача займёт ~${hours}ч. Алгоритм найдёт первый рабочий день с местом до дедлайна.`;
+  hint.textContent = `Задача займёт ~${hours}ч. Алгоритм найдёт первый рабочий день начиная с завтра.`;
   hint.className = 'auto-hint';
 }
 
