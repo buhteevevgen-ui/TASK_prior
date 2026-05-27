@@ -8,7 +8,6 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23007AFF%22/><text x=%2250%22 y=%2272%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22-apple-system%22 font-weight=%22600%22>T</text></svg>">
 <style>
   :root {
-    /* macOS system colors */
     --bg: #F5F5F7;
     --bg-elevated: #FFFFFF;
     --surface: #FFFFFF;
@@ -16,12 +15,10 @@
     --surface-tertiary: #E5E5EA;
     --separator: rgba(60, 60, 67, 0.12);
     --separator-strong: rgba(60, 60, 67, 0.18);
-
     --label: #1D1D1F;
     --label-secondary: #6E6E73;
     --label-tertiary: #8E8E93;
     --label-quaternary: #C7C7CC;
-
     --blue: #007AFF;
     --blue-hover: #0062CC;
     --blue-soft: #E5F1FF;
@@ -37,7 +34,6 @@
     --teal: #5AC8FA;
     --indigo: #5856D6;
     --gray: #8E8E93;
-
     --proj-ats: #34C759;
     --proj-ai: #FF3B30;
     --proj-analytics: #5856D6;
@@ -45,325 +41,96 @@
     --proj-ma: #007AFF;
     --proj-culture: #AF52DE;
     --proj-other: #8E8E93;
-
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 14px;
     --radius-xl: 18px;
-
     --shadow-xs: 0 1px 1px rgba(0, 0, 0, 0.03), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15), 0 0 0 0.5px rgba(0, 0, 0, 0.05);
-
     --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    background: var(--bg);
-    color: var(--label);
-    font-family: var(--font-system);
-    font-size: 13px;
-    line-height: 1.45;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-    min-height: 100vh;
-  }
+  html, body { background: var(--bg); color: var(--label); font-family: var(--font-system); font-size: 13px; line-height: 1.45; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; min-height: 100vh; }
   button { font-family: inherit; font-size: inherit; cursor: pointer; border: none; background: none; color: inherit; }
   input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
   ::selection { background: var(--blue-soft); }
 
-  /* HEADER (macOS title bar style) */
-  header {
-    background: rgba(245, 245, 247, 0.72);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-bottom: 0.5px solid var(--separator);
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    gap: 16px;
-  }
+  header { background: rgba(245, 245, 247, 0.72); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 0.5px solid var(--separator); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; gap: 16px; }
   .brand { display: flex; align-items: center; gap: 12px; }
-  .brand-icon {
-    width: 28px; height: 28px;
-    background: linear-gradient(135deg, var(--blue), var(--indigo));
-    border-radius: 7px;
-    display: flex; align-items: center; justify-content: center;
-    color: white; font-weight: 700; font-size: 15px;
-    box-shadow: var(--shadow-sm);
-  }
+  .brand-icon { width: 28px; height: 28px; background: linear-gradient(135deg, var(--blue), var(--indigo)); border-radius: 7px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 15px; box-shadow: var(--shadow-sm); }
   .brand h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; }
-  .brand .tagline { font-size: 11px; color: var(--label-tertiary); font-family: var(--font-mono); letter-spacing: 0; margin-left: 10px; padding-left: 10px; border-left: 0.5px solid var(--separator); }
-
+  .brand .tagline { font-size: 11px; color: var(--label-tertiary); font-family: var(--font-mono); margin-left: 10px; padding-left: 10px; border-left: 0.5px solid var(--separator); }
   .header-actions { display: flex; align-items: center; gap: 10px; }
-
-  /* Segmented control (macOS style) */
-  .view-switch {
-    display: flex;
-    background: var(--surface-tertiary);
-    border-radius: 7px;
-    padding: 2px;
-  }
-  .view-switch button {
-    padding: 5px 14px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--label);
-    border-radius: 5px;
-    transition: all 0.15s ease;
-  }
-  .view-switch button.active {
-    background: var(--surface);
-    box-shadow: var(--shadow-xs);
-  }
-
-  /* Primary button (macOS filled blue) */
-  .btn-primary {
-    background: var(--blue);
-    color: white;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-weight: 500;
-    font-size: 12px;
-    transition: background 0.12s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    box-shadow: 0 0.5px 1.5px rgba(0, 122, 255, 0.4), inset 0 0.5px 0 rgba(255, 255, 255, 0.15);
-  }
+  .view-switch { display: flex; background: var(--surface-tertiary); border-radius: 7px; padding: 2px; }
+  .view-switch button { padding: 5px 14px; font-size: 12px; font-weight: 500; color: var(--label); border-radius: 5px; transition: all 0.15s ease; }
+  .view-switch button.active { background: var(--surface); box-shadow: var(--shadow-xs); }
+  .btn-primary { background: var(--blue); color: white; padding: 6px 14px; border-radius: 6px; font-weight: 500; font-size: 12px; transition: background 0.12s ease; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0.5px 1.5px rgba(0, 122, 255, 0.4), inset 0 0.5px 0 rgba(255, 255, 255, 0.15); }
   .btn-primary:hover { background: var(--blue-hover); }
   .btn-primary:active { transform: scale(0.98); }
   .btn-primary .plus { font-size: 14px; line-height: 1; font-weight: 400; }
 
-  /* FILTERS */
-  .filters {
-    padding: 14px 24px 8px;
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .filter-label {
-    font-size: 11px;
-    color: var(--label-tertiary);
-    margin-right: 4px;
-    font-weight: 500;
-  }
-  .filter-chip {
-    padding: 4px 11px;
-    border-radius: 100px;
-    background: var(--surface);
-    border: 0.5px solid var(--separator);
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--label-secondary);
-    transition: all 0.12s ease;
-  }
+  .filters { padding: 14px 24px 8px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .filter-label { font-size: 11px; color: var(--label-tertiary); margin-right: 4px; font-weight: 500; }
+  .filter-chip { padding: 4px 11px; border-radius: 100px; background: var(--surface); border: 0.5px solid var(--separator); font-size: 12px; font-weight: 500; color: var(--label-secondary); transition: all 0.12s ease; }
   .filter-chip:hover { background: var(--surface-secondary); color: var(--label); }
   .filter-chip.active { background: var(--blue); color: white; border-color: var(--blue); }
 
-  main {
-    padding: 6px 24px 100px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
+  main { padding: 6px 24px 100px; max-width: 1400px; margin: 0 auto; }
 
-  /* STATS */
-  .stats-bar {
-    display: flex;
-    gap: 24px;
-    padding: 12px 0 16px;
-    margin-bottom: 12px;
-    border-bottom: 0.5px solid var(--separator);
-    flex-wrap: wrap;
-  }
+  .stats-bar { display: flex; gap: 24px; padding: 12px 0 16px; margin-bottom: 12px; border-bottom: 0.5px solid var(--separator); flex-wrap: wrap; }
   .stat { display: flex; flex-direction: column; gap: 1px; }
-  .stat-label {
-    font-size: 10px;
-    color: var(--label-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    font-weight: 600;
-  }
-  .stat-value {
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    font-feature-settings: 'tnum' on;
-  }
+  .stat-label { font-size: 10px; color: var(--label-tertiary); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+  .stat-value { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; font-feature-settings: 'tnum' on; }
   .stat-value.accent { color: var(--blue); }
   .stat-value.danger { color: var(--red); }
 
-  /* SECTION HEADERS (для группировки "Сегодня / Очередь") */
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    padding: 18px 4px 10px;
-    margin-top: 4px;
-  }
+  .section-header { display: flex; align-items: baseline; gap: 10px; padding: 18px 4px 10px; margin-top: 4px; }
   .section-header:first-child { padding-top: 4px; }
-  .section-title {
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
+  .section-title { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
   .section-title.today { color: var(--blue); }
-  .section-count {
-    font-size: 12px;
-    color: var(--label-tertiary);
-    font-weight: 500;
-    font-feature-settings: 'tnum' on;
-  }
-  .section-hours {
-    margin-left: auto;
-    font-size: 11px;
-    color: var(--label-tertiary);
-    font-family: var(--font-mono);
-  }
+  .section-count { font-size: 12px; color: var(--label-tertiary); font-weight: 500; font-feature-settings: 'tnum' on; }
+  .section-hours { margin-left: auto; font-size: 11px; color: var(--label-tertiary); font-family: var(--font-mono); }
   .section-hours.overload { color: var(--red); font-weight: 600; }
 
-  /* TASK CARD (macOS row style, like Reminders/Things) */
   .task-list { display: flex; flex-direction: column; gap: 6px; }
-  .task-card {
-    background: var(--surface);
-    border-radius: var(--radius-md);
-    padding: 12px 16px;
-    display: grid;
-    grid-template-columns: 4px 1fr auto auto;
-    gap: 14px;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.12s ease;
-    box-shadow: var(--shadow-xs);
-    border: 0.5px solid var(--separator);
-  }
+  .task-card { background: var(--surface); border-radius: var(--radius-md); padding: 12px 16px; display: grid; grid-template-columns: 4px 1fr auto auto; gap: 14px; align-items: center; cursor: pointer; transition: all 0.12s ease; box-shadow: var(--shadow-xs); border: 0.5px solid var(--separator); }
   .task-card:hover { box-shadow: var(--shadow-sm); transform: translateY(-0.5px); }
   .task-card.today { border-color: var(--blue); border-width: 1px; box-shadow: 0 0 0 3px var(--blue-soft); }
   .task-card.status-done { opacity: 0.5; }
   .task-card.status-done .task-title { text-decoration: line-through; color: var(--label-tertiary); }
-
   .project-stripe { grid-column: 1; width: 4px; border-radius: 100px; align-self: stretch; min-height: 28px; }
   .task-body { grid-column: 2; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
   .task-row1 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .task-title {
-    font-size: 13.5px;
-    font-weight: 500;
-    letter-spacing: -0.005em;
-    color: var(--label);
-  }
-  .project-tag {
-    font-size: 10px;
-    font-weight: 600;
-    padding: 1px 7px;
-    border-radius: 4px;
-    background: var(--surface-secondary);
-    color: var(--label-secondary);
-    letter-spacing: 0;
-  }
-  .task-meta {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 11.5px;
-    color: var(--label-tertiary);
-    flex-wrap: wrap;
-  }
+  .task-title { font-size: 13.5px; font-weight: 500; letter-spacing: -0.005em; color: var(--label); }
+  .project-tag { font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 4px; background: var(--surface-secondary); color: var(--label-secondary); }
+  .task-meta { display: flex; align-items: center; gap: 12px; font-size: 11.5px; color: var(--label-tertiary); flex-wrap: wrap; }
   .meta-item { display: flex; align-items: center; gap: 3px; }
   .meta-label { color: var(--label-tertiary); font-size: 10px; font-weight: 500; }
   .meta-value { color: var(--label-secondary); font-weight: 500; font-feature-settings: 'tnum' on; }
-
-  .deadline-badge {
-    font-size: 11px;
-    padding: 1px 7px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-feature-settings: 'tnum' on;
-  }
+  .deadline-badge { font-size: 11px; padding: 1px 7px; border-radius: 4px; font-weight: 500; font-feature-settings: 'tnum' on; }
   .deadline-badge.urgent { background: var(--red-soft); color: var(--red); }
   .deadline-badge.soon { background: var(--orange-soft); color: var(--orange); }
   .deadline-badge.later { background: var(--surface-secondary); color: var(--label-secondary); }
   .deadline-badge.today-badge { background: var(--blue-soft); color: var(--blue); font-weight: 600; }
-
-  .score-display {
-    grid-column: 3;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0;
-    min-width: 50px;
-  }
-  .score-value {
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: -0.03em;
-    font-feature-settings: 'tnum' on;
-  }
+  .score-display { grid-column: 3; display: flex; flex-direction: column; align-items: flex-end; gap: 0; min-width: 50px; }
+  .score-value { font-size: 22px; font-weight: 600; line-height: 1; letter-spacing: -0.03em; font-feature-settings: 'tnum' on; }
   .score-value.high { color: var(--red); }
   .score-value.med { color: var(--orange); }
   .score-value.low { color: var(--label-tertiary); }
-  .score-label {
-    font-size: 9px;
-    color: var(--label-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-    margin-top: 2px;
-  }
-
+  .score-label { font-size: 9px; color: var(--label-tertiary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-top: 2px; }
   .task-status { grid-column: 4; }
-  .status-select {
-    padding: 4px 10px;
-    border-radius: 6px;
-    border: 0.5px solid var(--separator);
-    background: var(--surface);
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--label-secondary);
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 12 12'%3E%3Cpath fill='%238E8E93' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    padding-right: 22px;
-  }
+  .status-select { padding: 4px 10px; border-radius: 6px; border: 0.5px solid var(--separator); background: var(--surface); font-size: 11px; font-weight: 500; color: var(--label-secondary); cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 12 12'%3E%3Cpath fill='%238E8E93' d='M6 8L2 4h8z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; padding-right: 22px; }
   .status-select.s-inprogress { background-color: var(--orange-soft); color: var(--orange); border-color: transparent; }
   .status-select.s-blocked { background-color: var(--red-soft); color: var(--red); border-color: transparent; }
   .status-select.s-done { background-color: var(--green-soft); color: var(--green); border-color: transparent; }
-
-  .empty-state {
-    padding: 60px 20px;
-    text-align: center;
-    color: var(--label-tertiary);
-  }
+  .empty-state { padding: 60px 20px; text-align: center; color: var(--label-tertiary); }
   .empty-state h3 { font-size: 17px; color: var(--label-secondary); margin-bottom: 4px; font-weight: 600; }
 
-  /* WEEK VIEW */
-  .week-board {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    align-items: start;
-  }
-  .day-column {
-    background: var(--surface);
-    border: 0.5px solid var(--separator);
-    border-radius: var(--radius-lg);
-    padding: 12px;
-    min-height: 200px;
-    transition: all 0.15s ease;
-    box-shadow: var(--shadow-xs);
-  }
+  .week-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; align-items: start; }
+  .day-column { background: var(--surface); border: 0.5px solid var(--separator); border-radius: var(--radius-lg); padding: 12px; min-height: 200px; transition: all 0.15s ease; box-shadow: var(--shadow-xs); }
   .day-column.today { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
   .day-column.drag-over { background: var(--blue-soft); border-color: var(--blue); }
   .day-header { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 0.5px solid var(--separator); }
@@ -373,14 +140,7 @@
   .day-load { font-size: 10px; color: var(--label-tertiary); margin-top: 4px; font-feature-settings: 'tnum' on; font-weight: 500; }
   .day-load.overload { color: var(--red); font-weight: 600; }
   .day-cards { display: flex; flex-direction: column; gap: 6px; min-height: 30px; }
-  .mini-card {
-    background: var(--surface-secondary);
-    border-radius: 8px;
-    padding: 8px 10px;
-    cursor: grab;
-    transition: all 0.12s ease;
-    border-left: 3px solid var(--proj-other);
-  }
+  .mini-card { background: var(--surface-secondary); border-radius: 8px; padding: 8px 10px; cursor: grab; transition: all 0.12s ease; border-left: 3px solid var(--proj-other); }
   .mini-card:hover { background: white; box-shadow: var(--shadow-sm); transform: translateY(-0.5px); }
   .mini-card:active { cursor: grabbing; }
   .mini-card.dragging { opacity: 0.4; }
@@ -390,119 +150,41 @@
   .mini-meta { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 10px; color: var(--label-tertiary); font-feature-settings: 'tnum' on; }
   .mini-score { font-weight: 600; color: var(--red); }
 
-  /* MODAL (macOS sheet style) */
-  .modal-backdrop {
-    position: fixed; inset: 0;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    display: none;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 60px 20px 40px;
-    z-index: 100;
-    overflow-y: auto;
-  }
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: flex-start; justify-content: center; padding: 60px 20px 40px; z-index: 100; overflow-y: auto; }
   .modal-backdrop.open { display: flex; }
-  .modal {
-    background: var(--surface);
-    border-radius: var(--radius-xl);
-    width: 100%;
-    max-width: 620px;
-    padding: 28px;
-    box-shadow: var(--shadow-lg);
-    animation: modalIn 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.2);
-  }
+  .modal { background: var(--surface); border-radius: var(--radius-xl); width: 100%; max-width: 620px; padding: 28px; box-shadow: var(--shadow-lg); animation: modalIn 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
   @keyframes modalIn { from { opacity: 0; transform: translateY(-12px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
-  }
-  .modal-header h2 {
-    font-size: 19px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-  }
-  .close-btn {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: var(--surface-tertiary);
-    color: var(--label-secondary);
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.12s ease;
-    font-size: 14px;
-    line-height: 1;
-  }
+  .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .modal-header h2 { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; }
+  .close-btn { width: 22px; height: 22px; border-radius: 50%; background: var(--surface-tertiary); color: var(--label-secondary); display: flex; align-items: center; justify-content: center; transition: all 0.12s ease; font-size: 14px; line-height: 1; }
   .close-btn:hover { background: var(--red); color: white; }
 
   .form-section { margin-bottom: 18px; }
-  .form-section-title {
-    font-size: 11px;
-    color: var(--label-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    font-weight: 600;
-    margin-bottom: 8px;
-    padding-bottom: 4px;
-    border-bottom: 0.5px solid var(--separator);
-  }
-  .form-row {
-    display: grid;
-    grid-template-columns: 130px 1fr;
-    gap: 14px;
-    align-items: center;
-    margin-bottom: 10px;
-  }
+  .form-section-title { font-size: 11px; color: var(--label-tertiary); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 0.5px solid var(--separator); }
+  .form-row { display: grid; grid-template-columns: 130px 1fr; gap: 14px; align-items: center; margin-bottom: 10px; }
   .form-row label { font-size: 12px; color: var(--label-secondary); font-weight: 500; }
-  .form-row input[type="text"], .form-row input[type="date"], .form-row textarea, .form-row select {
-    width: 100%;
-    padding: 6px 10px;
-    border: 0.5px solid var(--separator-strong);
-    border-radius: 6px;
-    background: var(--surface);
-    font-size: 13px;
-    transition: all 0.1s ease;
-  }
-  .form-row input:focus, .form-row textarea:focus, .form-row select:focus {
-    outline: none;
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px var(--blue-soft);
-  }
+  .form-row input[type="text"], .form-row input[type="date"], .form-row textarea, .form-row select { width: 100%; padding: 6px 10px; border: 0.5px solid var(--separator-strong); border-radius: 6px; background: var(--surface); font-size: 13px; transition: all 0.1s ease; }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
   .form-row textarea { resize: vertical; min-height: 56px; font-family: inherit; }
 
+  /* Auto-schedule control */
+  .schedule-row { display: flex; gap: 6px; align-items: center; }
+  .schedule-row input { flex: 1; }
+  .btn-auto { padding: 6px 12px; border-radius: 6px; background: var(--blue-soft); color: var(--blue); border: 0.5px solid transparent; font-size: 12px; font-weight: 600; transition: all 0.12s ease; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
+  .btn-auto:hover { background: var(--blue); color: white; }
+  .btn-auto:active { transform: scale(0.97); }
+  .btn-auto svg { width: 11px; height: 11px; }
+  .auto-hint { font-size: 11px; color: var(--label-tertiary); margin-top: 4px; }
+  .auto-hint.warn { color: var(--orange); }
+  .auto-hint.danger { color: var(--red); }
+
   .scale-input { display: flex; gap: 3px; }
-  .scale-input button {
-    flex: 1;
-    padding: 7px;
-    border: 0.5px solid var(--separator-strong);
-    border-radius: 6px;
-    background: var(--surface);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--label-secondary);
-    transition: all 0.1s ease;
-    font-variant-numeric: tabular-nums;
-  }
+  .scale-input button { flex: 1; padding: 7px; border: 0.5px solid var(--separator-strong); border-radius: 6px; background: var(--surface); font-size: 13px; font-weight: 500; color: var(--label-secondary); transition: all 0.1s ease; font-variant-numeric: tabular-nums; }
   .scale-input button:hover { background: var(--surface-secondary); color: var(--label); }
-  .scale-input button.selected {
-    background: var(--blue);
-    color: white;
-    border-color: var(--blue);
-    box-shadow: 0 0.5px 1.5px rgba(0, 122, 255, 0.4);
-  }
+  .scale-input button.selected { background: var(--blue); color: white; border-color: var(--blue); box-shadow: 0 0.5px 1.5px rgba(0, 122, 255, 0.4); }
   .scale-hint { font-size: 11px; color: var(--label-tertiary); margin-top: 4px; }
 
-  .preview-card {
-    background: var(--surface-secondary);
-    border-radius: var(--radius-md);
-    padding: 12px 16px;
-    margin: 14px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+  .preview-card { background: var(--surface-secondary); border-radius: var(--radius-md); padding: 12px 16px; margin: 14px 0; display: flex; justify-content: space-between; align-items: center; }
   .preview-label { font-size: 11px; color: var(--label-tertiary); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
   .preview-stats { display: flex; gap: 18px; align-items: center; }
   .preview-stat { display: flex; flex-direction: column; align-items: center; gap: 1px; }
@@ -510,73 +192,21 @@
   .preview-stat-value.large { font-size: 26px; color: var(--blue); letter-spacing: -0.02em; }
   .preview-stat-label { font-size: 9px; color: var(--label-tertiary); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
 
-  .modal-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 22px;
-    padding-top: 16px;
-    border-top: 0.5px solid var(--separator);
-  }
+  .modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 22px; padding-top: 16px; border-top: 0.5px solid var(--separator); }
   .modal-actions-right { display: flex; gap: 8px; }
-  .btn-secondary {
-    padding: 6px 14px;
-    border-radius: 6px;
-    background: var(--surface);
-    border: 0.5px solid var(--separator-strong);
-    font-weight: 500;
-    font-size: 12px;
-    transition: background 0.1s ease;
-  }
+  .btn-secondary { padding: 6px 14px; border-radius: 6px; background: var(--surface); border: 0.5px solid var(--separator-strong); font-weight: 500; font-size: 12px; transition: background 0.1s ease; }
   .btn-secondary:hover { background: var(--surface-secondary); }
-  .btn-danger {
-    padding: 6px 14px;
-    border-radius: 6px;
-    background: transparent;
-    color: var(--red);
-    font-weight: 500;
-    font-size: 12px;
-    transition: background 0.1s ease;
-  }
+  .btn-danger { padding: 6px 14px; border-radius: 6px; background: transparent; color: var(--red); font-weight: 500; font-size: 12px; transition: background 0.1s ease; }
   .btn-danger:hover { background: var(--red-soft); }
 
-  /* FOOTER */
   .footer-actions { position: fixed; bottom: 16px; right: 16px; display: flex; gap: 6px; z-index: 40; }
-  .ghost-btn {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border: 0.5px solid var(--separator);
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 11px;
-    color: var(--label-secondary);
-    font-weight: 500;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.12s ease;
-  }
+  .ghost-btn { background: rgba(255, 255, 255, 0.7); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border: 0.5px solid var(--separator); padding: 6px 12px; border-radius: 6px; font-size: 11px; color: var(--label-secondary); font-weight: 500; box-shadow: var(--shadow-sm); transition: all 0.12s ease; }
   .ghost-btn:hover { color: var(--label); background: var(--surface); }
+  .ghost-btn.accent { color: var(--blue); }
+  .ghost-btn.accent:hover { background: var(--blue); color: white; border-color: var(--blue); }
 
   .hidden { display: none !important; }
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(29, 29, 31, 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    color: white;
-    padding: 9px 16px;
-    border-radius: 100px;
-    font-size: 12px;
-    font-weight: 500;
-    box-shadow: var(--shadow-md);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    z-index: 200;
-    pointer-events: none;
-  }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(29, 29, 31, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: white; padding: 9px 16px; border-radius: 100px; font-size: 12px; font-weight: 500; box-shadow: var(--shadow-md); opacity: 0; transition: opacity 0.2s ease; z-index: 200; pointer-events: none; }
   .toast.show { opacity: 1; }
 
   @media (max-width: 900px) {
@@ -652,13 +282,24 @@
         <option value="Другое">Другое</option>
       </select></div>
       <div class="form-row"><label>Описание</label><textarea id="f-description" placeholder="Что именно сделать"></textarea></div>
-      <div class="form-row"><label>Зависимости</label><input type="text" id="f-dependencies" placeholder="От кого ждёшь, кого подключаешь"></div>
       <div class="form-row"><label>Дедлайн</label><input type="date" id="f-deadline"></div>
-      <div class="form-row"><label>Запланировано на</label><input type="date" id="f-scheduled"></div>
+      <div class="form-row">
+        <label>Запланировано на</label>
+        <div>
+          <div class="schedule-row">
+            <input type="date" id="f-scheduled">
+            <button type="button" class="btn-auto" id="auto-schedule-btn" title="Подобрать дату автоматически">
+              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM8 13a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm.5-8H7v3.5l3 2 .8-1.2-2.3-1.5V5z"/></svg>
+              Авто
+            </button>
+          </div>
+          <div class="auto-hint" id="auto-hint"></div>
+        </div>
+      </div>
     </div>
     <div class="form-section">
       <div class="form-section-title">Сложность (1-5)</div>
-      <div class="form-row"><label>Время</label><div><div class="scale-input" data-field="time"></div><div class="scale-hint">1=до 2ч • 2=до дня • 3=2-3 дня • 4=до недели • 5=больше недели</div></div></div>
+      <div class="form-row"><label>Время</label><div><div class="scale-input" data-field="time"></div><div class="scale-hint">1=до 1ч • 2=до 3ч • 3=4ч • 4=6ч • 5=1 день</div></div></div>
       <div class="form-row"><label>Фокус</label><div><div class="scale-input" data-field="focus"></div><div class="scale-hint">1=механика • 3=средняя нагрузка • 5=глубокий заход, новая область</div></div></div>
       <div class="form-row"><label>Координация</label><div><div class="scale-input" data-field="coordination"></div><div class="scale-hint">1=одна • 3=своя команда • 5=кросс-функционал + внешние</div></div></div>
     </div>
@@ -689,6 +330,7 @@
 </div>
 
 <div class="footer-actions">
+  <button class="ghost-btn accent" id="replan-btn" title="Авто-планирование всех незапланированных задач">Перепланировать</button>
   <button class="ghost-btn" id="export-btn">Экспорт</button>
   <button class="ghost-btn" id="import-btn">Импорт</button>
   <input type="file" id="import-file" accept="application/json" style="display:none;">
@@ -698,18 +340,19 @@
 
 <script>
 const STORAGE_KEY = 'taskPrioritizer:v1';
+const DAY_CAPACITY = 7; // часов в рабочий день
 
 const SEED = [
-  { id: 't1', title: 'Follow-up по итогам пятничной встречи Brand automation', project: 'HR Brand', description: 'Написать что обсуждали, что будем обсуждать в следующий синк', dependencies: '', deadline: '2026-05-26', scheduledFor: '2026-05-25', status: 'Todo', time: 1, focus: 1, coordination: 1, importance: 3, costOfDelay: 2 },
-  { id: 't2', title: 'Подготовить метрики для пилота в Sales', project: 'AI в рекрутменте', description: 'Определить проблему, которую решает инструмент, и автоматизируемое действие. Вывести метрику, зафиксировать as is, сформулировать ожидаемое значение.', dependencies: 'Костя Зайцев (саппорт)', deadline: '2026-05-28', scheduledFor: '2026-05-28', status: 'Todo', time: 2, focus: 3, coordination: 2, importance: 4, costOfDelay: 5 },
-  { id: 't3', title: 'Подготовить Follow-up по встрече с Аней', project: 'Culture fit', description: 'По итогам встречи с Аней зафиксировать договорённости, обсудить на синке во вторник', dependencies: '', deadline: '2026-05-25', scheduledFor: '2026-05-25', status: 'Todo', time: 1, focus: 2, coordination: 1, importance: 5, costOfDelay: 1 },
-  { id: 't4', title: 'Обновить карточки на Confluence / реестр проектов', project: 'Другое', description: 'Обновить карточки проектов и реестр к завтрашнему project review', dependencies: '', deadline: '2026-05-26', scheduledFor: '2026-05-25', status: 'Todo', time: 2, focus: 3, coordination: 1, importance: 5, costOfDelay: 4 },
-  { id: 't5', title: 'Подготовить обоснование для доработки Avito Survey', project: 'AI в рекрутменте', description: 'Подготовить обоснование доработок Avito Survey, написать владельцу продукта и запланировать встречу', dependencies: 'РГ', deadline: '2026-05-28', scheduledFor: '2026-06-02', status: 'Todo', time: 2, focus: 2, coordination: 2, importance: 2, costOfDelay: 3 },
-  { id: 't6', title: 'Подготовить доску по M&A для штурма to be', project: 'M&A', description: 'Подготовить шаблон доски для штурма с РГ по проблемам в процессе', dependencies: '', deadline: '2026-05-27', scheduledFor: '2026-05-27', status: 'Todo', time: 2, focus: 4, coordination: 1, importance: 4, costOfDelay: 4 },
-  { id: 't7', title: 'Написать Ане загруз для Кости', project: 'Другое', description: 'Подробно расписать деятельность Кости на 40 часов в неделю', dependencies: '', deadline: '2026-05-26', scheduledFor: '2026-05-26', status: 'Todo', time: 2, focus: 3, coordination: 1, importance: 3, costOfDelay: 4 },
-  { id: 't8', title: 'Погрузиться в AI-проекты более плотно', project: 'AI в рекрутменте', description: 'Погрузиться в роадмап и цели проектов, составить более точные планы', dependencies: 'Костя', deadline: '2026-06-05', scheduledFor: '2026-06-01', status: 'Todo', time: 2, focus: 4, coordination: 2, importance: 3, costOfDelay: 2 },
-  { id: 't9', title: 'Запланировать пилоты в стажировках', project: 'AI в рекрутменте', description: 'Дойти до Вики, предложить пилоты, проработать метрики и сроки', dependencies: 'Вика, Костя', deadline: '2026-05-29', scheduledFor: '2026-05-29', status: 'Todo', time: 2, focus: 3, coordination: 2, importance: 4, costOfDelay: 2 },
-  { id: 't10', title: 'Запланировать встречу со Степаном Грачёвым по M&A', project: 'M&A', description: 'Написать Степану и поставить встречу по процессам M&A', dependencies: 'Степан', deadline: '2026-05-29', scheduledFor: '2026-05-27', status: 'Todo', time: 1, focus: 2, coordination: 1, importance: 3, costOfDelay: 3 },
+  { id: 't1', title: 'Follow-up по итогам пятничной встречи Brand automation', project: 'HR Brand', description: 'Написать что обсуждали, что будем обсуждать в следующий синк', deadline: '2026-05-26', scheduledFor: '2026-05-25', status: 'Todo', time: 1, focus: 1, coordination: 1, importance: 3, costOfDelay: 2 },
+  { id: 't2', title: 'Подготовить метрики для пилота в Sales', project: 'AI в рекрутменте', description: 'Определить проблему, которую решает инструмент, и автоматизируемое действие. Вывести метрику, зафиксировать as is, сформулировать ожидаемое значение.', deadline: '2026-05-28', scheduledFor: '2026-05-28', status: 'Todo', time: 2, focus: 3, coordination: 2, importance: 4, costOfDelay: 5 },
+  { id: 't3', title: 'Подготовить Follow-up по встрече с Аней', project: 'Culture fit', description: 'По итогам встречи с Аней зафиксировать договорённости, обсудить на синке во вторник', deadline: '2026-05-25', scheduledFor: '2026-05-25', status: 'Todo', time: 1, focus: 2, coordination: 1, importance: 5, costOfDelay: 1 },
+  { id: 't4', title: 'Обновить карточки на Confluence / реестр проектов', project: 'Другое', description: 'Обновить карточки проектов и реестр к завтрашнему project review', deadline: '2026-05-26', scheduledFor: '2026-05-25', status: 'Todo', time: 2, focus: 3, coordination: 1, importance: 5, costOfDelay: 4 },
+  { id: 't5', title: 'Подготовить обоснование для доработки Avito Survey', project: 'AI в рекрутменте', description: 'Подготовить обоснование доработок Avito Survey, написать владельцу продукта и запланировать встречу', deadline: '2026-05-28', scheduledFor: '2026-06-02', status: 'Todo', time: 2, focus: 2, coordination: 2, importance: 2, costOfDelay: 3 },
+  { id: 't6', title: 'Подготовить доску по M&A для штурма to be', project: 'M&A', description: 'Подготовить шаблон доски для штурма с РГ по проблемам в процессе', deadline: '2026-05-27', scheduledFor: '2026-05-27', status: 'Todo', time: 2, focus: 4, coordination: 1, importance: 4, costOfDelay: 4 },
+  { id: 't7', title: 'Написать Ане загруз для Кости', project: 'Другое', description: 'Подробно расписать деятельность Кости на 40 часов в неделю', deadline: '2026-05-26', scheduledFor: '2026-05-26', status: 'Todo', time: 2, focus: 3, coordination: 1, importance: 3, costOfDelay: 4 },
+  { id: 't8', title: 'Погрузиться в AI-проекты более плотно', project: 'AI в рекрутменте', description: 'Погрузиться в роадмап и цели проектов, составить более точные планы', deadline: '2026-06-05', scheduledFor: '2026-06-01', status: 'Todo', time: 2, focus: 4, coordination: 2, importance: 3, costOfDelay: 2 },
+  { id: 't9', title: 'Запланировать пилоты в стажировках', project: 'AI в рекрутменте', description: 'Дойти до Вики, предложить пилоты, проработать метрики и сроки', deadline: '2026-05-29', scheduledFor: '2026-05-29', status: 'Todo', time: 2, focus: 3, coordination: 2, importance: 4, costOfDelay: 2 },
+  { id: 't10', title: 'Запланировать встречу со Степаном Грачёвым по M&A', project: 'M&A', description: 'Написать Степану и поставить встречу по процессам M&A', deadline: '2026-05-29', scheduledFor: '2026-05-27', status: 'Todo', time: 1, focus: 2, coordination: 1, importance: 3, costOfDelay: 3 },
 ];
 
 const PROJECT_COLORS = {
@@ -733,7 +376,7 @@ function calcDaysUntil(s) { if (!s) return null; const today = new Date(); today
 function calcUrgency(d) { if (d == null) return 1; if (d <= 3) return 5; if (d <= 7) return 4; if (d <= 14) return 3; if (d <= 30) return 2; return 1; }
 function calcPriority(t) { return +t.importance * 0.4 + calcUrgency(calcDaysUntil(t.deadline)) * 0.4 + +t.costOfDelay * 0.2; }
 function calcScore(t) { const s = calcSlozh(t); if (!s) return 0; return Math.round(calcPriority(t) / s * 100) / 10; }
-function calcHoursEstimate(t) { return ({1:2,2:6,3:16,4:32,5:48})[+t.time] || 0; }
+function calcHoursEstimate(t) { return ({1:1,2:3,3:4,4:6,5:7})[+t.time] || 0; }
 
 function todayISO() { const d = new Date(); d.setHours(0,0,0,0); return d.toISOString().split('T')[0]; }
 function escapeHtml(s) { if (s == null) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
@@ -743,7 +386,105 @@ function scoreClass(s) { if (s >= 20) return 'high'; if (s >= 10) return 'med'; 
 function getMonday(off=0) { const d = new Date(); d.setHours(0,0,0,0); const day = d.getDay(); const diff = day === 0 ? -6 : 1 - day; d.setDate(d.getDate() + diff + off * 7); return d; }
 function formatDate(d) { return `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}`; }
 function dateISO(d) { return d.toISOString().split('T')[0]; }
+function isWeekend(d) { const dow = d.getDay(); return dow === 0 || dow === 6; }
 
+// ============ AUTO-SCHEDULER ============
+function getDayLoad(iso, excludeId = null) {
+  return state.tasks
+    .filter(t => t.scheduledFor === iso && t.status !== 'Done' && t.id !== excludeId)
+    .reduce((s, t) => s + calcHoursEstimate(t), 0);
+}
+
+/**
+ * Подбирает оптимальную дату для задачи.
+ * Логика: ищем первый рабочий день (Пн-Пт) начиная с сегодня,
+ * где (текущая загрузка + min(нужное время, 7)) <= 7 часов.
+ * Не выходим за дедлайн. Если все дни до дедлайна забиты — ставим на день дедлайна.
+ *
+ * @returns { date: 'YYYY-MM-DD', overload: bool, lateAfterDeadline: bool, message: string }
+ */
+function autoSchedule(taskDraft, excludeId = null) {
+  const hoursNeeded = calcHoursEstimate(taskDraft);
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  let deadlineDate = null;
+  if (taskDraft.deadline) {
+    deadlineDate = new Date(taskDraft.deadline); deadlineDate.setHours(0,0,0,0);
+  }
+
+  // Если задача 1-2 (≤6ч) — пытаемся уместить с другими в день
+  // Если 3+ (16ч+) — нужен фактически пустой день
+  const slotNeeded = Math.min(hoursNeeded, DAY_CAPACITY);
+
+  let lastWorkdayBeforeDeadline = null;
+
+  // Итерируем по дням
+  for (let i = 0; i < 60; i++) {
+    const candidate = new Date(today);
+    candidate.setDate(today.getDate() + i);
+
+    if (isWeekend(candidate)) continue;
+
+    if (deadlineDate && candidate > deadlineDate) {
+      // Прошли дедлайн — забиваем
+      break;
+    }
+
+    if (deadlineDate && candidate <= deadlineDate) {
+      lastWorkdayBeforeDeadline = new Date(candidate);
+    }
+
+    const iso = dateISO(candidate);
+    const load = getDayLoad(iso, excludeId);
+
+    if (load + slotNeeded <= DAY_CAPACITY) {
+      // Влезает
+      const overload = false;
+      return { date: iso, overload, lateAfterDeadline: false, message: '' };
+    }
+  }
+
+  // Не нашли свободного слота
+  if (lastWorkdayBeforeDeadline) {
+    // Ставим на последний рабочий день перед дедлайном с предупреждением
+    const iso = dateISO(lastWorkdayBeforeDeadline);
+    return { date: iso, overload: true, lateAfterDeadline: false, message: 'Все дни до дедлайна забиты — день будет перегружен' };
+  }
+
+  // Нет дедлайна, не смогли найти — ставим на ближайший рабочий день
+  let fallback = new Date(today);
+  while (isWeekend(fallback)) fallback.setDate(fallback.getDate() + 1);
+  return { date: dateISO(fallback), overload: true, lateAfterDeadline: false, message: 'Подходящего слота нет — все дни загружены' };
+}
+
+function replanAll() {
+  if (!confirm('Перепланировать ВСЕ активные задачи? Текущее расписание будет переписано (Done не трогаем).')) return;
+
+  // Сбрасываем scheduledFor у активных задач (Done не трогаем)
+  const active = state.tasks.filter(t => t.status !== 'Done');
+  const done = state.tasks.filter(t => t.status === 'Done');
+
+  // Сортируем активные по Score (по убыванию) — наиболее приоритетные планируются первыми
+  active.sort((a, b) => calcScore(b) - calcScore(a));
+
+  // Очищаем scheduledFor у активных
+  active.forEach(t => t.scheduledFor = '');
+
+  // Идём по списку и проставляем
+  let overloadCount = 0;
+  for (const task of active) {
+    const result = autoSchedule(task, task.id);
+    task.scheduledFor = result.date;
+    if (result.overload) overloadCount++;
+  }
+
+  state.tasks = [...active, ...done];
+  saveTasks();
+  render();
+  showToast(`Перепланировано ${active.length} задач${overloadCount > 0 ? ` (${overloadCount} с перегрузом)` : ''}`);
+}
+
+// ============ RENDER ============
 function filteredTasks() {
   return state.tasks.filter(t => {
     if (state.filterProject !== 'all' && t.project !== state.filterProject) return false;
@@ -771,7 +512,6 @@ function taskCardHTML(t) {
           <span class="deadline-badge ${deadlineBadgeClass(t.days, isToday)}">${isToday ? 'сегодня план' : deadlineText(t.days)}</span>
           <span class="meta-item"><span class="meta-label">Сл</span> <span class="meta-value">${calcSlozh(t).toFixed(1)}</span></span>
           <span class="meta-item"><span class="meta-label">Пр</span> <span class="meta-value">${calcPriority(t).toFixed(2)}</span></span>
-          ${t.dependencies ? `<span class="meta-item"><span class="meta-label">с</span> ${escapeHtml(t.dependencies)}</span>` : ''}
         </div>
       </div>
       <div class="score-display"><div class="score-value ${scoreClass(t.score)}">${t.score.toFixed(1)}</div><div class="score-label">Score</div></div>
@@ -785,7 +525,6 @@ function renderTaskList() {
   const container = document.getElementById('task-sections');
   const today = todayISO();
   const allTasks = filteredTasks().map(t => ({ ...t, score: calcScore(t), days: calcDaysUntil(t.deadline) }));
-
   const todayTasks = allTasks.filter(t => t.scheduledFor === today).sort((a, b) => b.score - a.score);
   const otherTasks = allTasks.filter(t => t.scheduledFor !== today).sort((a, b) => b.score - a.score);
 
@@ -793,9 +532,7 @@ function renderTaskList() {
     container.innerHTML = `<div class="empty-state"><h3>Пусто</h3><p>Тут будут задачи когда добавишь</p></div>`;
     return;
   }
-
   const todayHours = todayTasks.filter(t => t.status !== 'Done').reduce((s, t) => s + calcHoursEstimate(t), 0);
-
   let html = '';
   if (todayTasks.length > 0) {
     html += `
@@ -804,8 +541,7 @@ function renderTaskList() {
         <span class="section-count">${todayTasks.length}</span>
         <span class="section-hours ${todayHours > 7 ? 'overload' : ''}">${todayHours}ч запланировано</span>
       </div>
-      <div class="task-list">${todayTasks.map(taskCardHTML).join('')}</div>
-    `;
+      <div class="task-list">${todayTasks.map(taskCardHTML).join('')}</div>`;
   }
   if (otherTasks.length > 0) {
     html += `
@@ -813,12 +549,9 @@ function renderTaskList() {
         <span class="section-title">Очередь</span>
         <span class="section-count">${otherTasks.length}</span>
       </div>
-      <div class="task-list">${otherTasks.map(taskCardHTML).join('')}</div>
-    `;
+      <div class="task-list">${otherTasks.map(taskCardHTML).join('')}</div>`;
   }
-
   container.innerHTML = html;
-
   container.querySelectorAll('.task-card').forEach(card => {
     card.addEventListener('click', e => { if (e.target.tagName === 'SELECT') return; openEditModal(card.dataset.id); });
   });
@@ -901,27 +634,73 @@ function render() {
 function buildScaleInputs() {
   document.querySelectorAll('.scale-input').forEach(group => {
     group.innerHTML = [1,2,3,4,5].map(n => `<button type="button" data-value="${n}">${n}</button>`).join('');
-    group.querySelectorAll('button').forEach(btn => { btn.onclick = () => { group.querySelectorAll('button').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); group.dataset.selected = btn.dataset.value; updatePreview(); }; });
+    group.querySelectorAll('button').forEach(btn => { btn.onclick = () => { group.querySelectorAll('button').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); group.dataset.selected = btn.dataset.value; updatePreview(); updateAutoHint(); }; });
   });
 }
 function setScale(f, v) { const g = document.querySelector(`.scale-input[data-field="${f}"]`); if (!g) return; g.querySelectorAll('button').forEach(b => b.classList.toggle('selected', b.dataset.value == v)); g.dataset.selected = v || ''; }
 function getScale(f) { const g = document.querySelector(`.scale-input[data-field="${f}"]`); return g ? Number(g.dataset.selected) : 0; }
+
+function getDraftFromForm() {
+  return {
+    time: getScale('time'),
+    focus: getScale('focus'),
+    coordination: getScale('coordination'),
+    importance: getScale('importance'),
+    costOfDelay: getScale('costOfDelay'),
+    deadline: document.getElementById('f-deadline').value,
+  };
+}
+
 function updatePreview() {
-  const t = { time: getScale('time'), focus: getScale('focus'), coordination: getScale('coordination'), importance: getScale('importance'), costOfDelay: getScale('costOfDelay'), deadline: document.getElementById('f-deadline').value };
+  const t = getDraftFromForm();
   const hasS = t.time && t.focus && t.coordination; const hasP = t.importance && t.costOfDelay && t.deadline;
   document.getElementById('preview-slozh').textContent = hasS ? calcSlozh(t).toFixed(1) : '—';
   document.getElementById('preview-prio').textContent = hasP ? calcPriority(t).toFixed(2) : '—';
   document.getElementById('preview-score').textContent = (hasS && hasP) ? calcScore(t).toFixed(1) : '—';
 }
+
+function updateAutoHint() {
+  const hint = document.getElementById('auto-hint');
+  const time = getScale('time');
+  if (!time) {
+    hint.textContent = 'Выбери оценку "Время" чтобы алгоритм мог подобрать день';
+    hint.className = 'auto-hint';
+    return;
+  }
+  const hours = calcHoursEstimate({ time });
+  hint.textContent = `Задача займёт ~${hours}ч. Алгоритм найдёт первый рабочий день с местом до дедлайна.`;
+  hint.className = 'auto-hint';
+}
+
+function runAutoSchedule() {
+  const time = getScale('time');
+  if (!time) { showToast('Сначала выбери "Время"', true); return; }
+  const draft = getDraftFromForm();
+  const result = autoSchedule(draft, state.editingId);
+  document.getElementById('f-scheduled').value = result.date;
+  const hint = document.getElementById('auto-hint');
+  const formatted = new Date(result.date).toLocaleDateString('ru-RU', { weekday: 'short', day: 'numeric', month: 'long' });
+  if (result.overload) {
+    hint.textContent = `${formatted} (${result.message})`;
+    hint.className = 'auto-hint danger';
+  } else {
+    const dayLoad = getDayLoad(result.date, state.editingId);
+    const hours = calcHoursEstimate({ time });
+    hint.textContent = `${formatted} — в этот день будет ${dayLoad + hours}ч`;
+    hint.className = 'auto-hint';
+  }
+}
+
 function openAddModal() {
   state.editingId = null;
   document.getElementById('modal-title').textContent = 'Новая задача';
-  ['f-title','f-description','f-dependencies','f-deadline','f-scheduled'].forEach(id => document.getElementById(id).value = '');
+  ['f-title','f-description','f-deadline','f-scheduled'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('f-project').value = 'AI в рекрутменте';
   document.getElementById('f-status').value = 'Todo';
   ['time','focus','coordination','importance','costOfDelay'].forEach(f => setScale(f, null));
   document.getElementById('delete-btn').style.display = 'none';
   updatePreview();
+  updateAutoHint();
   document.getElementById('modal-backdrop').classList.add('open');
   setTimeout(() => document.getElementById('f-title').focus(), 100);
 }
@@ -932,23 +711,56 @@ function openEditModal(id) {
   document.getElementById('f-title').value = t.title || '';
   document.getElementById('f-project').value = t.project || 'Другое';
   document.getElementById('f-description').value = t.description || '';
-  document.getElementById('f-dependencies').value = t.dependencies || '';
   document.getElementById('f-deadline').value = t.deadline || '';
   document.getElementById('f-scheduled').value = t.scheduledFor || '';
   document.getElementById('f-status').value = t.status || 'Todo';
   setScale('time', t.time); setScale('focus', t.focus); setScale('coordination', t.coordination); setScale('importance', t.importance); setScale('costOfDelay', t.costOfDelay);
   document.getElementById('delete-btn').style.display = '';
   updatePreview();
+  updateAutoHint();
   document.getElementById('modal-backdrop').classList.add('open');
 }
 function closeModal() { document.getElementById('modal-backdrop').classList.remove('open'); }
+
 function saveFromModal() {
   const title = document.getElementById('f-title').value.trim();
   if (!title) { showToast('Нужно название', true); return; }
-  const t = { id: state.editingId || ('t' + Date.now()), title, project: document.getElementById('f-project').value, description: document.getElementById('f-description').value.trim(), dependencies: document.getElementById('f-dependencies').value.trim(), deadline: document.getElementById('f-deadline').value, scheduledFor: document.getElementById('f-scheduled').value, status: document.getElementById('f-status').value, time: getScale('time') || 1, focus: getScale('focus') || 1, coordination: getScale('coordination') || 1, importance: getScale('importance') || 1, costOfDelay: getScale('costOfDelay') || 1 };
+  let scheduledFor = document.getElementById('f-scheduled').value;
+
+  const t = {
+    id: state.editingId || ('t' + Date.now()),
+    title,
+    project: document.getElementById('f-project').value,
+    description: document.getElementById('f-description').value.trim(),
+    deadline: document.getElementById('f-deadline').value,
+    scheduledFor,
+    status: document.getElementById('f-status').value,
+    time: getScale('time') || 1,
+    focus: getScale('focus') || 1,
+    coordination: getScale('coordination') || 1,
+    importance: getScale('importance') || 1,
+    costOfDelay: getScale('costOfDelay') || 1,
+  };
+
+  // Автопланирование если поле scheduled пустое
+  let autoAssigned = false;
+  if (!scheduledFor) {
+    const result = autoSchedule(t, state.editingId);
+    t.scheduledFor = result.date;
+    autoAssigned = true;
+  }
+
   if (state.editingId) { const i = state.tasks.findIndex(x => x.id === state.editingId); if (i >= 0) state.tasks[i] = t; } else { state.tasks.push(t); }
-  saveTasks(); closeModal(); render(); showToast(state.editingId ? 'Обновлено' : 'Задача добавлена');
+  saveTasks(); closeModal(); render();
+
+  const formatted = new Date(t.scheduledFor).toLocaleDateString('ru-RU', { weekday: 'short', day: 'numeric', month: 'long' });
+  if (autoAssigned) {
+    showToast(`Запланировано на ${formatted}`);
+  } else {
+    showToast(state.editingId ? 'Обновлено' : 'Задача добавлена');
+  }
 }
+
 function deleteFromModal() { if (!state.editingId) return; if (!confirm('Удалить задачу?')) return; state.tasks = state.tasks.filter(t => t.id !== state.editingId); saveTasks(); closeModal(); render(); showToast('Удалено'); }
 
 function showToast(text, err = false) { const t = document.getElementById('toast'); t.textContent = text; t.style.background = err ? 'rgba(255, 59, 48, 0.92)' : 'rgba(29, 29, 31, 0.92)'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
@@ -979,11 +791,13 @@ function init() {
   document.getElementById('cancel-btn').onclick = closeModal;
   document.getElementById('save-btn').onclick = saveFromModal;
   document.getElementById('delete-btn').onclick = deleteFromModal;
-  document.getElementById('f-deadline').addEventListener('input', updatePreview);
+  document.getElementById('auto-schedule-btn').onclick = runAutoSchedule;
+  document.getElementById('f-deadline').addEventListener('input', () => { updatePreview(); updateAutoHint(); });
   document.getElementById('modal-backdrop').addEventListener('click', e => { if (e.target.id === 'modal-backdrop') closeModal(); });
   document.getElementById('export-btn').onclick = exportJson;
   document.getElementById('import-btn').onclick = () => document.getElementById('import-file').click();
   document.getElementById('import-file').addEventListener('change', e => { if (e.target.files[0]) importJson(e.target.files[0]); });
+  document.getElementById('replan-btn').onclick = replanAll;
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openAddModal(); } });
 }
 init();
