@@ -372,20 +372,20 @@ function loadTasks() {
 function saveTasks() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.tasks)); } catch (e) { showToast('Не удалось сохранить', true); } }
 
 function calcSlozh(t) { return (+t.time + +t.focus + +t.coordination) / 3; }
-function calcDaysUntil(s) { if (!s) return null; const today = new Date(); today.setHours(0,0,0,0); const d = new Date(s); d.setHours(0,0,0,0); return Math.round((d - today) / 86400000); }
+function calcDaysUntil(s) { if (!s) return null; const today = new Date(); today.setHours(0,0,0,0); const p = s.split('-'); const d = new Date(+p[0], +p[1]-1, +p[2]); d.setHours(0,0,0,0); return Math.round((d - today) / 86400000); }
 function calcUrgency(d) { if (d == null) return 1; if (d <= 3) return 5; if (d <= 7) return 4; if (d <= 14) return 3; if (d <= 30) return 2; return 1; }
 function calcPriority(t) { return +t.importance * 0.4 + calcUrgency(calcDaysUntil(t.deadline)) * 0.4 + +t.costOfDelay * 0.2; }
 function calcScore(t) { const s = calcSlozh(t); if (!s) return 0; return Math.round(calcPriority(t) / s * 100) / 10; }
 function calcHoursEstimate(t) { return ({1:1,2:3,3:4,4:6,5:7})[+t.time] || 0; }
 
-function todayISO() { const d = new Date(); d.setHours(0,0,0,0); return d.toISOString().split('T')[0]; }
+function todayISO() { return dateISO(new Date()); }
 function escapeHtml(s) { if (s == null) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
 function deadlineBadgeClass(d, isScheduledToday) { if (isScheduledToday) return 'today-badge'; if (d == null) return 'later'; if (d <= 3) return 'urgent'; if (d <= 7) return 'soon'; return 'later'; }
 function deadlineText(d) { if (d == null) return 'без срока'; if (d < 0) return `просрочено ${-d} д`; if (d === 0) return 'сегодня'; if (d === 1) return 'завтра'; return `${d} д`; }
 function scoreClass(s) { if (s >= 20) return 'high'; if (s >= 10) return 'med'; return 'low'; }
 function getMonday(off=0) { const d = new Date(); d.setHours(0,0,0,0); const day = d.getDay(); const diff = day === 0 ? -6 : 1 - day; d.setDate(d.getDate() + diff + off * 7); return d; }
 function formatDate(d) { return `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}`; }
-function dateISO(d) { return d.toISOString().split('T')[0]; }
+function dateISO(d) { const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, '0'); const day = String(d.getDate()).padStart(2, '0'); return `${y}-${m}-${day}`; }
 function isWeekend(d) { const dow = d.getDay(); return dow === 0 || dow === 6; }
 
 // ============ AUTO-SCHEDULER ============
@@ -409,7 +409,7 @@ function autoSchedule(taskDraft, excludeId = null) {
 
   let deadlineDate = null;
   if (taskDraft.deadline) {
-    deadlineDate = new Date(taskDraft.deadline); deadlineDate.setHours(0,0,0,0);
+    const p = taskDraft.deadline.split('-'); deadlineDate = new Date(+p[0], +p[1]-1, +p[2]); deadlineDate.setHours(0,0,0,0);
   }
 
   // Если задача 1-2 (≤6ч) — пытаемся уместить с другими в день
@@ -583,7 +583,7 @@ function renderWeekView() {
   const today = todayISO();
   const friday = new Date(monday); friday.setDate(monday.getDate() + 4);
   document.getElementById('week-range').textContent = `${formatDate(monday)} — ${formatDate(friday)}`;
-  const weekTasks = state.tasks.filter(t => { if (!t.scheduledFor) return false; const sd = new Date(t.scheduledFor); sd.setHours(0,0,0,0); return sd >= monday && sd <= friday; });
+  const weekTasks = state.tasks.filter(t => { if (!t.scheduledFor) return false; const p = t.scheduledFor.split('-'); const sd = new Date(+p[0], +p[1]-1, +p[2]); sd.setHours(0,0,0,0); return sd >= monday && sd <= friday; });
   const totalHours = weekTasks.filter(t => t.status !== 'Done').reduce((s, t) => s + calcHoursEstimate(t), 0);
   const doneCount = weekTasks.filter(t => t.status === 'Done').length;
   document.getElementById('week-stats').innerHTML = `
